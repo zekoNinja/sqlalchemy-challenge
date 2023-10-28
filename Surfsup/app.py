@@ -73,9 +73,10 @@ def precipitation():
     return jsonify(rain_data)
 
 
+
 @app.route("/api/v1.0/stations")
 def stations():
-    """Returns a list of all the stations"""
+    """Returns a list of dates and temp for the most active station for a year"""
     stations_query = session.query(Station.station, Station.name).all()
     station_list = []
     for station, name in stations_query:
@@ -86,6 +87,28 @@ def stations():
         station_list.append(station_dict)
 
     return jsonify(station_list)
+
+
+@app.route("/api/v1.0/tobs")
+def stations():
+    """Returns a list of all the stations"""
+
+    most_recent_date = session.query(Measurment.date).order_by(Measurment.date.desc()).first()
+
+    year_ago_date = dt.date(2017,8,23) - dt.timedelta(days=365)
+    stat_temp_most_active = session.query(Measurment.date, Measurment.tobs).\
+        filter(Measurment.station == 'USC00519281').\
+            filter(Measurment.date >= year_ago_date).all()
+    temp_data = []
+    for date, tob in stat_temp_most_active:
+        temp_dict = {}
+        temp_dict["date"]= date
+        temp_dict["Temperutare"]= tob
+
+        temp_data.append(temp_dict)
+
+    return jsonify(temp_data)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
