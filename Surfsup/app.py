@@ -73,7 +73,7 @@ def precipitation():
     return jsonify(rain_data)
 
 
-
+#ask number 3
 @app.route("/api/v1.0/stations")
 def stations():
     """Returns a list of dates and temp for the most active station for a year"""
@@ -88,9 +88,9 @@ def stations():
 
     return jsonify(station_list)
 
-
+#ask number 4 
 @app.route("/api/v1.0/tobs")
-def stations():
+def tempdata():
     """Returns a list of all the stations"""
 
     most_recent_date = session.query(Measurment.date).order_by(Measurment.date.desc()).first()
