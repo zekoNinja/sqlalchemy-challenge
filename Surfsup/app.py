@@ -50,7 +50,8 @@ def welcome():
         f"/api/v1.0/start/end<br/>"
     )
 
-#ask number 2 
+#Convert the query results from your precipitation analysis (i.e. retrieve only the last 12 months of data) to a dictionary using date as the key and prcp as the value.
+#Return the JSON representation of your dictionary.
 @app.route("/api/v1.0/precipitation")
 def precipitation():
     """Return the rain data from the most recent date to the last 12 months"""
@@ -73,7 +74,7 @@ def precipitation():
     return jsonify(rain_data)
 
 
-#ask number 3
+#Return a JSON list of stations from the dataset.
 @app.route("/api/v1.0/stations")
 def stations():
     """Returns a list of dates and temp for the most active station for a year"""
@@ -88,7 +89,8 @@ def stations():
 
     return jsonify(station_list)
 
-#ask number 4 
+#Query the dates and temperature observations of the most-active station for the previous year of data 
+#Return a JSON list of temperature observations for the previous year.
 @app.route("/api/v1.0/tobs")
 def tempdata():
     """Returns a list of all the stations"""
