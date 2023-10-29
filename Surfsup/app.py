@@ -47,7 +47,7 @@ def welcome():
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
         f"/api/v1.0/start <br/>"
-        f"/api/v1.0/end<br/>"
+        f"/api/v1.0/start/end<br/>"
     )
 
 #ask number 2 
@@ -109,6 +109,48 @@ def tempdata():
 
     return jsonify(temp_data)
 
+
+#For a specified start date, calculate TMIN, TAVG, and TMAX for all the dates greater than or equal to the start date
+@app.route("/api/v1.0/start")
+def startdate1():
+    """Returns  Tmin, TAVG and TMAX for all dates greater than or equal to the start date"""
+
+    start_date = dt.date(2016,10,10)
+   
+    start_date_query = session.query(func.min(Measurment.tobs),func.max(Measurment.tobs),func.avg(Measurment.tobs)).\
+        filter(Measurment.date >= start_date).all()
+    temp_data_start = []
+    for Tmin, Tmax, Tavg in start_date_query:
+        temp_dict__start = {}
+        temp_dict__start["Temperature Min"]= Tmin
+        temp_dict__start["Temperature Max"]= Tmax
+        temp_dict__start["Temperature Avg"]= Tavg
+
+        temp_data_start.append(temp_dict__start)
+
+    return jsonify(temp_data_start)
+
+#For a specified start and end date, calculate TMIN, TAVG, and TMAX for all the dates greater than or equal to the start date
+@app.route("/api/v1.0/start/end")
+def starenddate():
+    """Returns  Tmin, TAVG and TMAX for all dates greater than or equal to the start date and end"""
+
+    start_date1 = dt.date(2016,8,23)
+    end_date1 = dt.date(2017,8,23)
+   
+    start_date_query1 = session.query(func.min(Measurment.tobs),func.max(Measurment.tobs),func.avg(Measurment.tobs)).\
+        filter(Measurment.date >= start_date1).\
+            filter(Measurment.date <= end_date1).all()
+    temp_data_start1 = []
+    for Tmin1, Tmax1, Tavg1 in start_date_query1:
+        temp_dict__start1 = {}
+        temp_dict__start1["Temperature Min"]= Tmin1
+        temp_dict__start1["Temperature Max"]= Tmax1
+        temp_dict__start1["Temperature Avg"]= Tavg1
+
+        temp_data_start1.append(temp_dict__start1)
+
+    return jsonify(temp_data_start1)
 
 if __name__ == '__main__':
     app.run(debug=True)
